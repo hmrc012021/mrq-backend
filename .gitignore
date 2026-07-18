@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.local
+.DS_Store
+*.log
+
+# Local Netlify folder
+.netlify
+
+# Claude Code local settings
+.claude/
