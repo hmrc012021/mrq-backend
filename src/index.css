@@ -36,6 +36,7 @@ main.full { max-width: none; padding: 0; }
 .focus { font: 700 24px Cambria; color: var(--n); margin: 5px 0; }
 .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 9px; }
 .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.usage-cell { text-align: center; font-variant-numeric: tabular-nums; }
 .metric { font-size: 28px; font-weight: 700; color: var(--n); }
 .label { font-size: 11px; text-transform: uppercase; color: var(--m); font-weight: 700; }
 .small { font-size: 12px; color: var(--m); }

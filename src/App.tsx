@@ -15,12 +15,15 @@ import { Social } from '@/pages/Social';
 import { Training } from '@/pages/Training';
 import { System } from '@/pages/System';
 import { Crm } from '@/pages/crm/Crm';
+import { AiUsage } from '@/pages/AiUsage';
+import { Signups } from '@/pages/Signups';
 
-const TABS = ['dashboard', 'crm', 'actions', 'deliverables', 'milestones', 'decisions', 'reconciliation', 'intake', 'sources', 'social', 'training', 'system'] as const;
+const TABS = ['dashboard', 'crm', 'actions', 'deliverables', 'milestones', 'decisions', 'reconciliation', 'signups', 'aiusage', 'intake', 'sources', 'social', 'training', 'system'] as const;
 type Tab = (typeof TABS)[number];
 
 function tabLabel(t: Tab): string {
   if (t === 'crm') return 'CRM / Stakeholders';
+  if (t === 'aiusage') return 'AI Usage';
   return t[0].toUpperCase() + t.slice(1);
 }
 
@@ -90,6 +93,10 @@ export default function App() {
           <Decisions rows={data.decisions} isAuthed={isAuthed} onRequireAuth={() => setAuthOpen(true)} onReload={reload} />
         ) : tab === 'reconciliation' ? (
           <Reconciliation rows={data.reconciliation} />
+        ) : tab === 'signups' ? (
+          <Signups requests={data.signupRequests} isAuthed={isAuthed} onRequireAuth={() => setAuthOpen(true)} onReload={reload} />
+        ) : tab === 'aiusage' ? (
+          <AiUsage outputs={data.guidanceOutputs} profiles={data.userProfiles} />
         ) : tab === 'intake' ? (
           <Intake rows={data.raw} />
         ) : tab === 'sources' ? (

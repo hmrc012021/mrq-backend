@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabaseClient';
 import type {
   MrqAction, MrqDeliverable, MrqMilestone, MrqDecision, MrqReconciliationItem,
   MrqRawExtract, MrqSourceMap, MrqOperatingRule, MrqSocialMetric, MrqTrainingBlock,
-  CrmContact, CrmInteraction, CrmNote, Venue,
+  CrmContact, CrmInteraction, CrmNote, Venue, UserProfile, GuidanceOutput, SignupRequest,
 } from '@/types/database.types';
 
 export interface MrqData {
@@ -21,12 +21,15 @@ export interface MrqData {
   venues: Venue[];
   social: MrqSocialMetric[];
   training: MrqTrainingBlock[];
+  userProfiles: UserProfile[];
+  guidanceOutputs: GuidanceOutput[];
+  signupRequests: SignupRequest[];
 }
 
 const EMPTY: MrqData = {
   actions: [], deliverables: [], milestones: [], decisions: [], reconciliation: [],
   raw: [], sources: [], rules: [], contacts: [], interactions: [], notes: [],
-  venues: [], social: [], training: [],
+  venues: [], social: [], training: [], userProfiles: [], guidanceOutputs: [], signupRequests: [],
 };
 
 export function useMrqData() {
@@ -41,6 +44,7 @@ export function useMrqData() {
       const [
         actions, deliverables, milestones, decisions, reconciliation,
         raw, sources, rules, contacts, interactions, notes, venues, social, training,
+        userProfiles, guidanceOutputs, signupRequests,
       ] = await Promise.all([
         supabase.from('mrq_action').select('*').order('priority', { ascending: true }).order('sort_order', { ascending: true }).order('id', { ascending: true }),
         supabase.from('mrq_deliverable').select('*').order('id'),
@@ -56,9 +60,12 @@ export function useMrqData() {
         supabase.from('venue').select('venue_id,venue_name,city,country').order('venue_name'),
         supabase.from('mrq_social_metric').select('*').order('metric_date', { ascending: false }),
         supabase.from('mrq_training_block').select('*').order('block_date', { ascending: false }),
+        supabase.from('user_profile').select('user_id,auth_uid,display_name,profile_type,total_encounters,total_visits,last_session_date,token_budget,budget_enforcement_enabled'),
+        supabase.from('guidance_output').select('output_id,user_id,work_id,output_type,dna_angle,persona,language,created_at,tokens_used,cost_estimate').order('created_at', { ascending: false }),
+        supabase.from('signup_request').select('*').order('submitted_at', { ascending: false }),
       ]);
 
-      for (const r of [actions, deliverables, milestones, decisions, reconciliation, raw, sources, rules, contacts, interactions, notes, venues, social, training]) {
+      for (const r of [actions, deliverables, milestones, decisions, reconciliation, raw, sources, rules, contacts, interactions, notes, venues, social, training, userProfiles, guidanceOutputs, signupRequests]) {
         if (r.error) throw r.error;
       }
 
@@ -77,6 +84,9 @@ export function useMrqData() {
         venues: venues.data ?? [],
         social: social.data ?? [],
         training: training.data ?? [],
+        userProfiles: userProfiles.data ?? [],
+        guidanceOutputs: guidanceOutputs.data ?? [],
+        signupRequests: signupRequests.data ?? [],
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));

@@ -165,6 +165,44 @@ export interface Venue {
   country: string | null;
 }
 
+export interface UserProfile {
+  user_id: string;
+  auth_uid: string | null;
+  display_name: string | null;
+  profile_type: string | null;
+  total_encounters: number | null;
+  total_visits: number | null;
+  last_session_date: string | null;
+  token_budget: number | null;
+  budget_enforcement_enabled: boolean | null;
+}
+
+export interface GuidanceOutput {
+  output_id: string;
+  user_id: string | null;
+  work_id: string | null;
+  output_type: string | null;
+  dna_angle: string | null;
+  persona: string | null;
+  language: string | null;
+  created_at: string | null;
+  tokens_used: number | null;
+  cost_estimate: number | null;
+}
+
+export interface SignupRequest {
+  id: number;
+  name: string | null;
+  email: string | null;
+  institution: string | null;
+  motivation: string | null;
+  status: string | null;
+  submitted_at: string | null;
+  reviewed_at: string | null;
+  assigned_user_id: string | null;
+  notes: string | null;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -182,6 +220,9 @@ export interface Database {
       crm_interaction: { Row: CrmInteraction; Insert: Partial<CrmInteraction>; Update: Partial<CrmInteraction> };
       crm_note: { Row: CrmNote; Insert: Partial<CrmNote>; Update: Partial<CrmNote> };
       venue: { Row: Venue; Insert: Partial<Venue>; Update: Partial<Venue> };
+      user_profile: { Row: UserProfile; Insert: Partial<UserProfile>; Update: Partial<UserProfile> };
+      guidance_output: { Row: GuidanceOutput; Insert: Partial<GuidanceOutput>; Update: Partial<GuidanceOutput> };
+      signup_request: { Row: SignupRequest; Insert: Partial<SignupRequest>; Update: Partial<SignupRequest> };
     };
   };
 }
