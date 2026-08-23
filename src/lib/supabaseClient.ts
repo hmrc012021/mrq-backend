@@ -25,3 +25,13 @@ export async function signInWithPassword(email: string, password: string) {
 export async function signOut() {
   await supabase.auth.signOut();
 }
+
+export async function resetPasswordForEmail(email: string) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  if (error) throw error;
+}
+
+export async function updatePassword(password: string) {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw error;
+}

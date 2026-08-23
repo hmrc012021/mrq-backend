@@ -17,12 +17,22 @@ header {
   display: flex; align-items: center; gap: 18px; position: sticky; top: 0; z-index: 5;
 }
 .brand { font: 700 22px Cambria; color: var(--g); white-space: nowrap; }
-nav { display: flex; gap: 3px; overflow: auto; flex: 1; }
+nav { display: flex; gap: 3px; flex-wrap: wrap; flex: 1; }
 nav button {
   border: 0; background: transparent; color: #ddd; padding: 8px 10px;
   font-weight: 700; white-space: nowrap; cursor: pointer;
 }
 nav button.active { background: var(--g); color: #fff; border-radius: 4px; }
+.subnav {
+  display: flex; gap: 6px; overflow: auto; margin-bottom: 16px;
+  border-bottom: 1px solid #E0D9D0; padding-bottom: 10px;
+}
+.subnav button {
+  border: 1px solid #E0D9D0; background: #fff; color: var(--n);
+  padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 13px;
+  white-space: nowrap; cursor: pointer;
+}
+.subnav button.active { background: var(--n); color: #fff; border-color: var(--n); }
 .btn { border: 0; border-radius: 4px; padding: 8px 11px; background: var(--n); color: white; font-weight: 700; cursor: pointer; }
 .gold { background: var(--g); }
 .ghost { background: white; color: var(--n); border: 1px solid var(--n); }
