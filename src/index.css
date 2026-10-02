@@ -171,7 +171,11 @@ table.preview th { background: var(--i); position: sticky; top: 0; }
 }
 @media (max-width: 650px) {
   .grid, .week, .alerts, .form { grid-template-columns: 1fr; }
-  header { position: static; }
+  header { position: static; flex-wrap: wrap; gap: 8px 12px; padding: 10px 12px; }
+  header > span { display: none; }
+  .domain-select { flex: 1 1 100%; max-width: none; }
+  nav button { padding: 8px 8px; }
+  main { padding: 12px; }
 }
 
 /* Login screens -- same look as the MRQ Guidance app */
