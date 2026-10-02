@@ -11,6 +11,7 @@ export function Decisions({ rows, isAuthed, onRequireAuth, onReload }: { rows: M
       onRequireAuth={onRequireAuth}
       onReload={onReload}
       columns={[
+        { key: 'domain', label: 'Domain' },
         { key: 'id', label: 'ID' },
         { key: 'decision', label: 'Decision' },
         { key: 'bucket', label: 'Bucket' },
@@ -18,6 +19,7 @@ export function Decisions({ rows, isAuthed, onRequireAuth, onReload }: { rows: M
         { key: 'still_valid', label: 'Valid?' },
       ]}
       formFields={[
+        { key: 'domain', label: 'Domain' },
         { key: 'id', label: 'ID' },
         { key: 'bucket', label: 'Bucket' },
         { key: 'workstream', label: 'Workstream' },

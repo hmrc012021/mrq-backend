@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { useDomains, ALL_DOMAINS } from '@/lib/domainContext';
 
 export interface FieldDef { key: string; label: string; }
 export interface ColumnDef<T> { key: keyof T & string; label: string; render?: (v: unknown, row: T) => React.ReactNode; }
@@ -118,9 +119,11 @@ function RecordModal({
   onDelete: () => void;
   onSave: (values: Record<string, string | null>) => void;
 }) {
+  const { domains, selected } = useDomains();
   const [values, setValues] = useState<Record<string, string | null>>(() => {
     const v: Record<string, string | null> = {};
     for (const f of fields) v[f.key] = initial[f.key] != null ? String(initial[f.key]) : '';
+    if ('domain' in v && !v.domain) v.domain = selected !== ALL_DOMAINS ? selected : 'MRQ';
     return v;
   });
 
@@ -131,10 +134,16 @@ function RecordModal({
         {fields.map((f) => (
           <label key={f.key}>
             {f.label}
-            <input
-              value={values[f.key] ?? ''}
-              onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
-            />
+            {f.key === 'domain' ? (
+              <select value={values.domain ?? ''} onChange={(e) => setValues((v) => ({ ...v, domain: e.target.value }))}>
+                {domains.map((d) => <option key={d.code} value={d.code}>{d.code} — {d.domain_name}</option>)}
+              </select>
+            ) : (
+              <input
+                value={values[f.key] ?? ''}
+                onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
+              />
+            )}
           </label>
         ))}
       </div>

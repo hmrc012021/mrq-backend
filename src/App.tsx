@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase, signOut, signInWithPassword, resetPasswordForEmail, updatePassword } from '@/lib/supabaseClient';
 import { useMrqData } from '@/lib/useMrqData';
+import { DomainContext, ALL_DOMAINS } from '@/lib/domainContext';
 import { Dashboard } from '@/pages/Dashboard';
 import { Actions } from '@/pages/Actions';
 import { Deliverables } from '@/pages/Deliverables';
@@ -128,17 +129,16 @@ function LoginGate({ onSignedIn }: { onSignedIn: () => void }) {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--p)' }}>
-      <div className="card" style={{ width: 340 }}>
-        <div className="brand" style={{ marginBottom: 4 }}>My<em>Raphael</em>Quest</div>
-        <div className="small" style={{ marginBottom: 14 }}>CEO Dashboard</div>
-        <p><input ref={emailRef} type="email" placeholder="Email" style={{ width: '100%' }} onKeyDown={(e) => e.key === 'Enter' && signIn()} /></p>
-        <p><input ref={pwRef} type="password" placeholder="Password" style={{ width: '100%' }} onKeyDown={(e) => e.key === 'Enter' && signIn()} /></p>
-        {error && <p style={{ color: 'var(--r)', fontSize: 13, fontWeight: 600 }}>{error}</p>}
-        <button className="btn gold" onClick={signIn} disabled={busy} style={{ width: '100%' }}>{busy ? 'Signing in…' : 'Login'}</button>
-        <p style={{ textAlign: 'center', marginTop: 10, marginBottom: 0 }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); forgotPassword(); }} style={{ fontSize: 12, color: 'var(--n)' }}>Forgot password?</a>
-        </p>
+    <div className="auth-wrap">
+      <div className="auth-logo">My<em>Raphael</em>Quest</div>
+      <div className="auth-tagline">CEO Dashboard</div>
+      <div className="auth-label">Sign in</div>
+      <div className="auth-form">
+        <input className="auth-input" type="email" placeholder="Email address" autoComplete="username" ref={emailRef} onKeyDown={(e) => e.key === 'Enter' && pwRef.current?.focus()} />
+        <input className="auth-input" type="password" placeholder="Password" autoComplete="current-password" ref={pwRef} onKeyDown={(e) => e.key === 'Enter' && signIn()} />
+        {error && <div className="auth-error">{error}</div>}
+        <button className="auth-btn" onClick={signIn} disabled={busy}>{busy ? 'Signing in…' : 'Log in'}</button>
+        <a href="#" className="auth-link" onClick={(e) => { e.preventDefault(); forgotPassword(); }}>Forgot your password?</a>
       </div>
     </div>
   );
@@ -174,14 +174,15 @@ function SetPasswordGate({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--p)' }}>
-      <div className="card" style={{ width: 340 }}>
-        <div className="brand" style={{ marginBottom: 4 }}>My<em>Raphael</em>Quest</div>
-        <div className="small" style={{ marginBottom: 14 }}>Set a new password</div>
-        <p><input ref={pwRef} type="password" placeholder="New password (min. 8 characters)" style={{ width: '100%' }} onKeyDown={(e) => e.key === 'Enter' && submit()} /></p>
-        <p><input ref={confirmRef} type="password" placeholder="Confirm password" style={{ width: '100%' }} onKeyDown={(e) => e.key === 'Enter' && submit()} /></p>
-        {error && <p style={{ color: 'var(--r)', fontSize: 13, fontWeight: 600 }}>{error}</p>}
-        <button className="btn gold" onClick={submit} disabled={busy} style={{ width: '100%' }}>{busy ? 'Setting password…' : 'Set password & continue'}</button>
+    <div className="auth-wrap">
+      <div className="auth-logo">My<em>Raphael</em>Quest</div>
+      <div className="auth-tagline">Set a new password</div>
+      <div className="auth-label">New password</div>
+      <div className="auth-form">
+        <input className="auth-input" type="password" placeholder="New password (min. 8 characters)" autoComplete="new-password" ref={pwRef} onKeyDown={(e) => e.key === 'Enter' && confirmRef.current?.focus()} />
+        <input className="auth-input" type="password" placeholder="Confirm password" autoComplete="new-password" ref={confirmRef} onKeyDown={(e) => e.key === 'Enter' && submit()} />
+        {error && <div className="auth-error">{error}</div>}
+        <button className="auth-btn" onClick={submit} disabled={busy}>{busy ? 'Setting password…' : 'Set password & continue'}</button>
       </div>
     </div>
   );
@@ -195,6 +196,17 @@ export default function App() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [recovery, setRecovery] = useState(false);
   const { data, loading, error, reload } = useMrqData();
+  const [domain, setDomain] = useState<string>(() => {
+    try { return localStorage.getItem('pos-domain') || ALL_DOMAINS; } catch { return ALL_DOMAINS; }
+  });
+  function chooseDomain(d: string) {
+    setDomain(d);
+    try { localStorage.setItem('pos-domain', d); } catch { /* ignore */ }
+  }
+  const shown = useMemo(() => {
+    const by = <T extends { domain?: string }>(rows: T[]) => (domain === ALL_DOMAINS ? rows : rows.filter((r) => r.domain === domain));
+    return { actions: by(data.actions), deliverables: by(data.deliverables), milestones: by(data.milestones), decisions: by(data.decisions) };
+  }, [data, domain]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -228,15 +240,20 @@ export default function App() {
             </button>
           ))}
         </nav>
+        <select className="domain-select" value={domain} onChange={(e) => chooseDomain(e.target.value)} title="Domain">
+          <option value={ALL_DOMAINS}>All domains</option>
+          {data.domains.map((d) => <option key={d.code} value={d.code}>{d.code} — {d.domain_name}</option>)}
+        </select>
         <span>{session?.user.email}</span>
         <button className="btn gold" onClick={signOut}>Logout</button>
       </header>
       <div className="status">{statusText}</div>
+      <DomainContext.Provider value={{ domains: data.domains, selected: domain }}>
       <main className={isFull ? 'full' : ''}>
         {loading ? (
           <div className="card small">Loading…</div>
         ) : tab === 'dashboard' ? (
-          <Dashboard actions={data.actions} interactions={data.interactions} contacts={data.contacts} />
+          <Dashboard actions={shown.actions} interactions={data.interactions} contacts={data.contacts} />
         ) : tab === 'crm' ? (
           <Crm
             contacts={data.contacts}
@@ -257,13 +274,13 @@ export default function App() {
               ))}
             </nav>
             {actionLogTab === 'actions' ? (
-              <Actions rows={data.actions} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
+              <Actions rows={shown.actions} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
             ) : actionLogTab === 'deliverables' ? (
-              <Deliverables rows={data.deliverables} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
+              <Deliverables rows={shown.deliverables} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
             ) : actionLogTab === 'milestones' ? (
-              <Milestones rows={data.milestones} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
+              <Milestones rows={shown.milestones} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
             ) : (
-              <Decisions rows={data.decisions} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
+              <Decisions rows={shown.decisions} isAuthed={isAuthed} onRequireAuth={reqAuth} onReload={reload} />
             )}
           </>
         ) : tab === 'social' ? (
@@ -296,6 +313,7 @@ export default function App() {
           </>
         )}
       </main>
+      </DomainContext.Provider>
     </>
   );
 }

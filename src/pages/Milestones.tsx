@@ -12,6 +12,7 @@ export function Milestones({ rows, isAuthed, onRequireAuth, onReload }: { rows: 
       onRequireAuth={onRequireAuth}
       onReload={onReload}
       columns={[
+        { key: 'domain', label: 'Domain' },
         { key: 'id', label: 'ID' },
         { key: 'status', label: 'Status', render: (v) => <Badge value={v as string} /> },
         { key: 'milestone', label: 'Milestone' },
@@ -19,6 +20,7 @@ export function Milestones({ rows, isAuthed, onRequireAuth, onReload }: { rows: 
         { key: 'target_period', label: 'Target' },
       ]}
       formFields={[
+        { key: 'domain', label: 'Domain' },
         { key: 'id', label: 'ID' },
         { key: 'bucket', label: 'Bucket' },
         { key: 'workstream', label: 'Workstream' },

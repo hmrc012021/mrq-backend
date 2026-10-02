@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import type {
   MrqAction, MrqDeliverable, MrqMilestone, MrqDecision,
-  MrqOperatingRule, MrqSocialMetric, MrqTrainingBlock,
+  MrqOperatingRule, MrqSocialMetric, MrqTrainingBlock, PosDomain,
   CrmContact, CrmInteraction, CrmNote, Venue, UserProfile, GuidanceOutput, SignupRequest,
 } from '@/types/database.types';
 
@@ -12,6 +12,7 @@ export interface MrqData {
   milestones: MrqMilestone[];
   decisions: MrqDecision[];
   rules: MrqOperatingRule[];
+  domains: PosDomain[];
   contacts: CrmContact[];
   interactions: CrmInteraction[];
   notes: CrmNote[];
@@ -25,7 +26,7 @@ export interface MrqData {
 
 const EMPTY: MrqData = {
   actions: [], deliverables: [], milestones: [], decisions: [],
-  rules: [], contacts: [], interactions: [], notes: [],
+  rules: [], domains: [], contacts: [], interactions: [], notes: [],
   venues: [], social: [], training: [], userProfiles: [], guidanceOutputs: [], signupRequests: [],
 };
 
@@ -40,7 +41,7 @@ export function useMrqData() {
     try {
       const [
         actions, deliverables, milestones, decisions,
-        rules, contacts, interactions, notes, venues, social, training,
+        rules, domains, contacts, interactions, notes, venues, social, training,
         userProfiles, guidanceOutputs, signupRequests,
       ] = await Promise.all([
         supabase.from('pos_action').select('*').order('priority', { ascending: true }).order('sort_order', { ascending: true }).order('id', { ascending: true }),
@@ -48,6 +49,7 @@ export function useMrqData() {
         supabase.from('pos_milestone').select('*').order('id'),
         supabase.from('pos_decision').select('*').order('id'),
         supabase.from('mrq_operating_rule').select('*').order('id'),
+        supabase.from('pos_domain').select('code,domain_name,sort_order').eq('active', true).order('sort_order'),
         supabase.from('crm_contact').select('*').order('last_name', { ascending: true, nullsFirst: false }),
         supabase.from('crm_interaction').select('*').order('date', { ascending: false, nullsFirst: false }),
         supabase.from('crm_note').select('*'),
@@ -59,7 +61,7 @@ export function useMrqData() {
         supabase.from('signup_request').select('*').order('submitted_at', { ascending: false }),
       ]);
 
-      for (const r of [actions, deliverables, milestones, decisions, rules, contacts, interactions, notes, venues, social, training, userProfiles, guidanceOutputs, signupRequests]) {
+      for (const r of [actions, deliverables, milestones, decisions, rules, domains, contacts, interactions, notes, venues, social, training, userProfiles, guidanceOutputs, signupRequests]) {
         if (r.error) throw r.error;
       }
 
@@ -69,6 +71,7 @@ export function useMrqData() {
         milestones: milestones.data ?? [],
         decisions: decisions.data ?? [],
         rules: rules.data ?? [],
+        domains: domains.data ?? [],
         contacts: contacts.data ?? [],
         interactions: interactions.data ?? [],
         notes: notes.data ?? [],

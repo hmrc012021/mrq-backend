@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap');
 :root {
   --n: #1e2761;
   --b: #6e2a2a;
@@ -172,3 +173,20 @@ table.preview th { background: var(--i); position: sticky; top: 0; }
   .grid, .week, .alerts, .form { grid-template-columns: 1fr; }
   header { position: static; }
 }
+
+/* Login screens -- same look as the MRQ Guidance app */
+.auth-wrap { min-height: 100vh; background: #F7F3EC; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 20px; font-family: 'Montserrat', sans-serif; }
+.auth-logo { font-family: 'EB Garamond', serif; font-size: 40px; font-weight: 600; color: #2C3A6B; margin-bottom: 4px; }
+.auth-logo em { color: #B8892A; font-style: italic; }
+.auth-tagline { font-family: 'EB Garamond', serif; font-size: 18px; font-style: italic; color: #666666; margin-bottom: 24px; text-align: center; }
+.auth-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #B8892A; margin-bottom: 10px; }
+.auth-form { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; }
+.auth-input { width: 100%; background: #fff; border: 2px solid #C8C0B0; border-radius: 8px; font-family: 'EB Garamond', serif; font-size: 16px; color: #2C3A6B; padding: 12px 14px; outline: none; }
+.auth-input:focus { border-color: #B8892A; }
+.auth-btn { margin-top: 6px; background: #2C3A6B; color: #fff; border: 2px solid #2C3A6B; border-radius: 8px; font-family: 'EB Garamond', serif; font-size: 16px; padding: 10px 20px; cursor: pointer; transition: all 0.2s; }
+.auth-btn:hover { border-color: #B8892A; }
+.auth-btn:disabled { opacity: 0.6; cursor: default; }
+.auth-error { color: #C0392B; font-size: 13px; font-family: 'EB Garamond', serif; }
+.auth-link { text-align: center; font-size: 13px; font-family: 'EB Garamond', serif; color: #2C3A6B; text-decoration: underline; margin-top: 2px; }
+.domain-select { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.35); border-radius: 4px; padding: 6px 8px; font-weight: 700; max-width: 240px; }
+.domain-select option { color: #2a2420; }

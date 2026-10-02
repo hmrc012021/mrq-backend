@@ -12,6 +12,7 @@ export function Actions({ rows, isAuthed, onRequireAuth, onReload }: { rows: Mrq
       onRequireAuth={onRequireAuth}
       onReload={onReload}
       columns={[
+        { key: 'domain', label: 'Domain' },
         { key: 'priority', label: 'Priority', render: (v) => <Badge value={v as string} /> },
         { key: 'status', label: 'Status', render: (v) => <Badge value={v as string} /> },
         { key: 'action', label: 'Action' },
@@ -22,6 +23,7 @@ export function Actions({ rows, isAuthed, onRequireAuth, onReload }: { rows: Mrq
         { key: 'selected_for_week', label: 'Week', render: (v) => (v ? '✓' : '') },
       ]}
       formFields={[
+        { key: 'domain', label: 'Domain' },
         { key: 'id', label: 'ID' },
         { key: 'deliverable_id', label: 'Deliverable ID' },
         { key: 'bucket', label: 'Bucket' },

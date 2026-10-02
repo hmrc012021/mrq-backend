@@ -12,6 +12,7 @@ export function Deliverables({ rows, isAuthed, onRequireAuth, onReload }: { rows
       onRequireAuth={onRequireAuth}
       onReload={onReload}
       columns={[
+        { key: 'domain', label: 'Domain' },
         { key: 'id', label: 'ID' },
         { key: 'status', label: 'Status', render: (v) => <Badge value={v as string} /> },
         { key: 'deliverable', label: 'Deliverable' },
@@ -20,6 +21,7 @@ export function Deliverables({ rows, isAuthed, onRequireAuth, onReload }: { rows
         { key: 'owner', label: 'Owner' },
       ]}
       formFields={[
+        { key: 'domain', label: 'Domain' },
         { key: 'id', label: 'ID' },
         { key: 'bucket', label: 'Bucket' },
         { key: 'workstream', label: 'Workstream' },

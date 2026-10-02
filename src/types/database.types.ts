@@ -2,6 +2,12 @@
 // static-HTML CEO Dashboard and CRM apps. Not generated from `supabase gen
 // types` since this connector doesn't have access to this project.
 
+export interface PosDomain {
+  code: string;
+  domain_name: string;
+  sort_order: number;
+}
+
 export interface MrqAction {
   id: string;
   domain?: string;
@@ -190,6 +196,7 @@ export interface Database {
       pos_deliverable: { Row: MrqDeliverable; Insert: Partial<MrqDeliverable>; Update: Partial<MrqDeliverable> };
       pos_milestone: { Row: MrqMilestone; Insert: Partial<MrqMilestone>; Update: Partial<MrqMilestone> };
       pos_decision: { Row: MrqDecision; Insert: Partial<MrqDecision>; Update: Partial<MrqDecision> };
+      pos_domain: { Row: PosDomain; Insert: Partial<PosDomain>; Update: Partial<PosDomain> };
       mrq_operating_rule: { Row: MrqOperatingRule; Insert: Partial<MrqOperatingRule>; Update: Partial<MrqOperatingRule> };
       mrq_social_metric: { Row: MrqSocialMetric; Insert: Partial<MrqSocialMetric>; Update: Partial<MrqSocialMetric> };
       mrq_training_block: { Row: MrqTrainingBlock; Insert: Partial<MrqTrainingBlock>; Update: Partial<MrqTrainingBlock> };
