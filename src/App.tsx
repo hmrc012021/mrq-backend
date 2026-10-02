@@ -23,7 +23,7 @@ import { LearningPathAdmin } from '@/pages/admin/LearningPathAdmin';
 // `intake` were dropped from navigation entirely (2026-08-07) -- investigated
 // and confirmed they're not ongoing tools, just a one-time record of the July
 // 2026 spreadsheet-to-database migration that built the Actions/Deliverables/CRM
-// tables in the first place (all rows share one import_batch_id from 2026-07-15).
+// tables in the first place (since archived out of the public schema -- see migration_archive).
 // `training` also dropped (2026-08-07, explicit call) -- not a data/schema
 // change, just no nav entry for either; underlying tables untouched.
 // Order and labels below are exact, deliberate choices, not alphabetical.

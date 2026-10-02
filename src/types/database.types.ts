@@ -4,6 +4,7 @@
 
 export interface MrqAction {
   id: string;
+  domain?: string;
   deliverable_id: string | null;
   bucket: string | null;
   workstream: string | null;
@@ -21,6 +22,7 @@ export interface MrqAction {
 
 export interface MrqDeliverable {
   id: string;
+  domain?: string;
   bucket: string | null;
   workstream: string | null;
   deliverable: string | null;
@@ -33,6 +35,7 @@ export interface MrqDeliverable {
 
 export interface MrqMilestone {
   id: string;
+  domain?: string;
   bucket: string | null;
   workstream: string | null;
   milestone: string | null;
@@ -43,36 +46,13 @@ export interface MrqMilestone {
 
 export interface MrqDecision {
   id: string;
+  domain?: string;
   bucket: string | null;
   workstream: string | null;
   decision: string | null;
   decision_date_approx: string | null;
   still_valid: string | null;
   consequence: string | null;
-}
-
-export interface MrqReconciliationItem {
-  id: string;
-  classification: string | null;
-  item: string | null;
-  reason: string | null;
-  source: string | null;
-}
-
-export interface MrqRawExtract {
-  id: string;
-  source_track: string | null;
-  extract_type: string | null;
-  status: string | null;
-  raw_extract: string | null;
-}
-
-export interface MrqSourceMap {
-  id: string;
-  source_file: string | null;
-  source_tab: string | null;
-  imported: string | null;
-  treatment: string | null;
 }
 
 export interface MrqOperatingRule {
@@ -206,13 +186,10 @@ export interface SignupRequest {
 export interface Database {
   public: {
     Tables: {
-      mrq_action: { Row: MrqAction; Insert: Partial<MrqAction>; Update: Partial<MrqAction> };
-      mrq_deliverable: { Row: MrqDeliverable; Insert: Partial<MrqDeliverable>; Update: Partial<MrqDeliverable> };
-      mrq_milestone: { Row: MrqMilestone; Insert: Partial<MrqMilestone>; Update: Partial<MrqMilestone> };
-      mrq_decision: { Row: MrqDecision; Insert: Partial<MrqDecision>; Update: Partial<MrqDecision> };
-      mrq_reconciliation_item: { Row: MrqReconciliationItem; Insert: Partial<MrqReconciliationItem>; Update: Partial<MrqReconciliationItem> };
-      mrq_raw_extract: { Row: MrqRawExtract; Insert: Partial<MrqRawExtract>; Update: Partial<MrqRawExtract> };
-      mrq_source_map: { Row: MrqSourceMap; Insert: Partial<MrqSourceMap>; Update: Partial<MrqSourceMap> };
+      pos_action: { Row: MrqAction; Insert: Partial<MrqAction>; Update: Partial<MrqAction> };
+      pos_deliverable: { Row: MrqDeliverable; Insert: Partial<MrqDeliverable>; Update: Partial<MrqDeliverable> };
+      pos_milestone: { Row: MrqMilestone; Insert: Partial<MrqMilestone>; Update: Partial<MrqMilestone> };
+      pos_decision: { Row: MrqDecision; Insert: Partial<MrqDecision>; Update: Partial<MrqDecision> };
       mrq_operating_rule: { Row: MrqOperatingRule; Insert: Partial<MrqOperatingRule>; Update: Partial<MrqOperatingRule> };
       mrq_social_metric: { Row: MrqSocialMetric; Insert: Partial<MrqSocialMetric>; Update: Partial<MrqSocialMetric> };
       mrq_training_block: { Row: MrqTrainingBlock; Insert: Partial<MrqTrainingBlock>; Update: Partial<MrqTrainingBlock> };

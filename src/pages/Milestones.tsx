@@ -6,7 +6,7 @@ export function Milestones({ rows, isAuthed, onRequireAuth, onReload }: { rows: 
   return (
     <RecordTable<MrqMilestone>
       title="Milestones"
-      table="mrq_milestone"
+      table="pos_milestone"
       rows={rows}
       isAuthed={isAuthed}
       onRequireAuth={onRequireAuth}

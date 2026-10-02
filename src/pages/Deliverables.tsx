@@ -6,7 +6,7 @@ export function Deliverables({ rows, isAuthed, onRequireAuth, onReload }: { rows
   return (
     <RecordTable<MrqDeliverable>
       title="Deliverables"
-      table="mrq_deliverable"
+      table="pos_deliverable"
       rows={rows}
       isAuthed={isAuthed}
       onRequireAuth={onRequireAuth}

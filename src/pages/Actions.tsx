@@ -6,7 +6,7 @@ export function Actions({ rows, isAuthed, onRequireAuth, onReload }: { rows: Mrq
   return (
     <RecordTable<MrqAction>
       title="Actions"
-      table="mrq_action"
+      table="pos_action"
       rows={rows}
       isAuthed={isAuthed}
       onRequireAuth={onRequireAuth}

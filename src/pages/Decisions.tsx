@@ -5,7 +5,7 @@ export function Decisions({ rows, isAuthed, onRequireAuth, onReload }: { rows: M
   return (
     <RecordTable<MrqDecision>
       title="Decisions"
-      table="mrq_decision"
+      table="pos_decision"
       rows={rows}
       isAuthed={isAuthed}
       onRequireAuth={onRequireAuth}

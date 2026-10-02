@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import type {
-  MrqAction, MrqDeliverable, MrqMilestone, MrqDecision, MrqReconciliationItem,
-  MrqRawExtract, MrqSourceMap, MrqOperatingRule, MrqSocialMetric, MrqTrainingBlock,
+  MrqAction, MrqDeliverable, MrqMilestone, MrqDecision,
+  MrqOperatingRule, MrqSocialMetric, MrqTrainingBlock,
   CrmContact, CrmInteraction, CrmNote, Venue, UserProfile, GuidanceOutput, SignupRequest,
 } from '@/types/database.types';
 
@@ -11,9 +11,6 @@ export interface MrqData {
   deliverables: MrqDeliverable[];
   milestones: MrqMilestone[];
   decisions: MrqDecision[];
-  reconciliation: MrqReconciliationItem[];
-  raw: MrqRawExtract[];
-  sources: MrqSourceMap[];
   rules: MrqOperatingRule[];
   contacts: CrmContact[];
   interactions: CrmInteraction[];
@@ -27,8 +24,8 @@ export interface MrqData {
 }
 
 const EMPTY: MrqData = {
-  actions: [], deliverables: [], milestones: [], decisions: [], reconciliation: [],
-  raw: [], sources: [], rules: [], contacts: [], interactions: [], notes: [],
+  actions: [], deliverables: [], milestones: [], decisions: [],
+  rules: [], contacts: [], interactions: [], notes: [],
   venues: [], social: [], training: [], userProfiles: [], guidanceOutputs: [], signupRequests: [],
 };
 
@@ -42,17 +39,14 @@ export function useMrqData() {
     setError(null);
     try {
       const [
-        actions, deliverables, milestones, decisions, reconciliation,
-        raw, sources, rules, contacts, interactions, notes, venues, social, training,
+        actions, deliverables, milestones, decisions,
+        rules, contacts, interactions, notes, venues, social, training,
         userProfiles, guidanceOutputs, signupRequests,
       ] = await Promise.all([
-        supabase.from('mrq_action').select('*').order('priority', { ascending: true }).order('sort_order', { ascending: true }).order('id', { ascending: true }),
-        supabase.from('mrq_deliverable').select('*').order('id'),
-        supabase.from('mrq_milestone').select('*').order('id'),
-        supabase.from('mrq_decision').select('*').order('id'),
-        supabase.from('mrq_reconciliation_item').select('*').order('id'),
-        supabase.from('mrq_raw_extract').select('*').order('id'),
-        supabase.from('mrq_source_map').select('*').order('id'),
+        supabase.from('pos_action').select('*').order('priority', { ascending: true }).order('sort_order', { ascending: true }).order('id', { ascending: true }),
+        supabase.from('pos_deliverable').select('*').order('id'),
+        supabase.from('pos_milestone').select('*').order('id'),
+        supabase.from('pos_decision').select('*').order('id'),
         supabase.from('mrq_operating_rule').select('*').order('id'),
         supabase.from('crm_contact').select('*').order('last_name', { ascending: true, nullsFirst: false }),
         supabase.from('crm_interaction').select('*').order('date', { ascending: false, nullsFirst: false }),
@@ -65,7 +59,7 @@ export function useMrqData() {
         supabase.from('signup_request').select('*').order('submitted_at', { ascending: false }),
       ]);
 
-      for (const r of [actions, deliverables, milestones, decisions, reconciliation, raw, sources, rules, contacts, interactions, notes, venues, social, training, userProfiles, guidanceOutputs, signupRequests]) {
+      for (const r of [actions, deliverables, milestones, decisions, rules, contacts, interactions, notes, venues, social, training, userProfiles, guidanceOutputs, signupRequests]) {
         if (r.error) throw r.error;
       }
 
@@ -74,9 +68,6 @@ export function useMrqData() {
         deliverables: deliverables.data ?? [],
         milestones: milestones.data ?? [],
         decisions: decisions.data ?? [],
-        reconciliation: reconciliation.data ?? [],
-        raw: raw.data ?? [],
-        sources: sources.data ?? [],
         rules: rules.data ?? [],
         contacts: contacts.data ?? [],
         interactions: interactions.data ?? [],
