@@ -217,6 +217,10 @@ export default function App() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    document.querySelector('header nav button.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }, [tab]);
+
   const isAuthed = Boolean(session);
   const isFull = tab === 'crm';
 
